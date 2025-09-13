@@ -69,8 +69,6 @@ cd ai_chatbot
  JWT_EXPIRES=1h
  OPENROUTER_API_KEY=your_openrouter_key_here
  OPENROUTER_MODEL=openai/gpt-3.5-turbo
- EMAIL_USER=your_email_here
- EMAIL_PASS=your_email_password_or_app_key
 ```
  Run server:
  ```
