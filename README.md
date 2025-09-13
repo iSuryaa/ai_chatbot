@@ -1,59 +1,83 @@
- AI Customer Support App (CRE)
- A **minimal full-stack customer support chatbot** built with **React + Node.js + Express + MongoDB +
- OpenRouter AI**.
- Users can **sign up, log in, reset password, chat with an AI assistant, and view their past chat history**.---- 
- Features
- **Authentication**- Signup, Login, Logout with **JWT**- Forget Password (reset via email or token)- Passwords hashed with **bcrypt**- Protected routes for authenticated users- 
- **Chat System**- Send messages to an AI assistant- Display AI-generated responses- Store chat history in **MongoDB** (user-scoped)- View past conversations- 
- **AI Integration**- Uses [OpenRouter API](https://openrouter.ai/) (free-tier supported)- 
- **Backend (Node.js + Express)**- `/auth/signup` → Create account- `/auth/login` → Authenticate user- `/auth/forgot-password` → Request password reset
-- `/auth/reset-password` → Reset password with token- `/chat/send` → Send message, get AI response- `/chat/history` → Fetch chat logs- 
- **Frontend (React + Vite)**- Clean chat UI with TailwindCSS- Axios for API calls- JWT stored in `localStorage` (- 
- **Dockerized**
- for demo only — in production use **HTTP-only cookies**)- Run entire app with one command:
- ```bash
- docker compose up
- ```--
- Tech Stack
- | Layer | Tech |
- |-----------|------|
- | Frontend | React |
- | Backend | Node.js, Express |
- | Database | MongoDB Atlas |
- | Auth | JWT, bcrypt |
- | AI | OpenRouter API |
- | Deployment | Vercel / Render / Railway (free-tier) |
- | DevOps | Docker, Docker Compose |
---
-1
- ```bash
- Setup
- Clone Repo
- git clone https://github.com/your-username/ai-support-app.git
- cd ai-support-app
- ```
- 2
- ```bash
+# AI Customer Support App (CRE)
+
+## 📌 Overview
+Minimal full-stack AI-powered customer support chatbot.  
+
+---
+
+## ✨ Features
+- **Authentication**
+  - Signup / Login / Logout (JWT)
+  - Forgot / Reset Password
+  - Passwords hashed with bcrypt
+  - Protected routes  
+- **Chat System**
+  - Send messages to AI assistant
+  - AI-generated responses
+  - Chat history stored in MongoDB
+  - View past conversations  
+- **AI Integration**
+  - OpenRouter API (free-tier)  
+- **Backend (Node.js + Express)**
+  - `/auth/signup`
+  - `/auth/login`
+  - `/auth/forgot-password`
+  - `/auth/reset-password`
+  - `/chat/send`
+  - `/chat/history`  
+- **Frontend (React)**
+  - Core CSS
+  - Axios for API calls
+  - JWT stored in localStorage (demo)  
+- **DevOps**
+  - Docker + Docker Compose
+  - One-command setup  
+
+---
+
+## 🛠️ Tech Stack
+| Layer     | Tech                     |
+|-----------|--------------------------|
+| Frontend  | React
+| Backend   | Node.js, Express         |
+| Database  | MongoDB Atlas            |
+| Auth      | JWT, bcrypt              |
+| AI        | OpenRouter API           |
+| Deployment| Vercel, Render
+| DevOps    | Docker, Docker Compose   |
+
+---
+
+## ⚙️ Setup
+### 1. Clone Repo
+
+git clone [https://github.com/your-username/ai-support-app.git](https://github.com/iSuryaa/ai_chatbot.git)
+cd ai_chatbot
+
+### 2. Backend Setup (`server/`)
+ 
  cd server
  Backend Setup (`server/`)
  npm install
  cp .env.example .env
- ```
+ 
  Fill in your `.env`:
  ```env
- PORT=4000
+ PORT=5000
  MONGO_URI=your_mongo_uri_here
  JWT_SECRET=your_jwt_secret_here
  JWT_EXPIRES=1h
  OPENROUTER_API_KEY=your_openrouter_key_here
  OPENROUTER_MODEL=openai/gpt-3.5-turbo
+ EMAIL_USER=your_email_here
+ EMAIL_PASS=your_email_password_or_app_key
 ```
  Run server:
- ```bash
+ ```
  npm run dev
  ```
- 3
- ```bash
+ ### 3. Frontend Setup (`client/`)
+
  cd client
  Frontend Setup (`client/`)
  npm install
@@ -84,6 +108,6 @@
  client/ → React frontend
  server/ → Express backend
  ```--
- Deployment- Frontend → [Vercel](https://vercel.com/)- Backend → [Render](https://render.com/) / MongoDB → [MongoDB Atlas](https://www.mongodb.com/atlas)--
+ Deployment- Frontend → [Vercel](https://vercel.com/)- Backend → [Render](https://render.com/) /MongoDB → [MongoDB Atlas](https://www.mongodb.com/atlas)--
  License
- MIT License — free to use and modify.
+ MIT License — free to use and modify
