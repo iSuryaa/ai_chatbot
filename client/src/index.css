@@ -376,3 +376,8 @@ form input[type="submit"] {
     max-width: 80%;
   }
 }
+@media (max-width: 600px) {
+  .header-text {
+    font-size: 17px;
+  }
+}

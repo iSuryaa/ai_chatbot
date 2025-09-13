@@ -6,7 +6,8 @@ import { EyeOpen, EyeClosed } from "../components/Icon";
 import { login, signup } from "../api/auth";
 
 export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "", name: "", confirmPassword: "" });
+  const initialForm = { email: "", password: "", name: "", confirmPassword: "" };
+  const [form, setForm] = useState(initialForm);
   const [active, setActive] = useState(true);
   const [signUpErrors, setSignUpErrors] = useState({});
   const [signUpMsg, setSignUpMsg] = useState("");
@@ -14,6 +15,8 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showCnfmPassword, setShowCnfmPassword] = useState(false);
   const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -22,6 +25,7 @@ export default function Login() {
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     setSignUpErrors({});
+    setLoading(true);
 
     // Client-side validation
     const errors = {};
@@ -31,6 +35,7 @@ export default function Login() {
 
     if (Object.keys(errors).length > 0) {
       setSignUpErrors(errors);
+      setLoading(false);
       return;
     }
 
@@ -39,30 +44,33 @@ export default function Login() {
       saveToken(data.token);
       setSignUpMsg(data.message);
       setSignUpErrors({});
-      setForm({ email: "", password: "", name: "", confirmPassword: "" });
+      setForm(initialForm);
       setTimeout(() => {
         setActive(true);
         setSignUpMsg("")
-      }
-        , 3000);
+      }, 3000);
     } catch (err) {
       setSignUpErrors(err?.response?.data?.errors);
+    } finally {
+    setLoading(false);
     }
   };
 
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const data = await login(form);
       saveToken(data.token);
-
       setTimeout(() => {
         navigate("/chat");
       }, 1000);
     } catch (err) {
       console.error("Login failed:", err);
       setLoginErrors(err?.response?.data?.errors);
+    } finally {
+    setLoading(false);
     }
   };
 
@@ -75,13 +83,14 @@ export default function Login() {
       <div className={`wrapper ${active ? "active" : ""}`}>
         {/* Signup Form */}
         <div className="form signup">
-          <header onClick={() => setActive(false)}>Create Account</header>
+          <header onClick={() => {setActive(false); setForm(initialForm)}}>Create Account</header>
           <form onSubmit={handleSignupSubmit}>
             <div className="form-group">
               <input
                 type="text"
                 placeholder="Full Name"
                 className={signUpErrors.name ? "danger-border" : ""}
+                value={form.name}
                 required
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
@@ -92,6 +101,7 @@ export default function Login() {
                 type="email"
                 placeholder="Email address"
                 className={signUpErrors.email ? "danger-border" : ""}
+                value={form.email}
                 required
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
               />
@@ -103,6 +113,7 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   placeholder="Password"
+                  value={form.password}
                   className={signUpErrors.password ? "danger-border" : ""}
                   required
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -123,6 +134,7 @@ export default function Login() {
                   type={showCnfmPassword ? "text" : "password"}
                   placeholder="Confirm Password"
                   className={signUpErrors.confirmPassword ? "danger-border" : ""}
+                  value={form.confirmPassword}
                   required
                   onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
                 />
@@ -138,19 +150,20 @@ export default function Login() {
             </div>
             {signUpErrors?.general && <p className="danger-text">{signUpErrors?.general}</p>}
             {signUpMsg && <p className="success-text">{signUpMsg}</p>}
-            <input type="submit" value="Sign Up" />
+            <input type="submit"  value={loading ? "Signing Up..." : "Sign Up"} disabled={loading} />
           </form>
         </div>
 
         {/* Login Form */}
         <div className="form login">
-          <header onClick={() => setActive(true)}>Login</header>
+          <header onClick={() => {setActive(true); setForm(initialForm)}}>Login</header>
           <form onSubmit={handleLoginSubmit}>
             <div className="form-group">
               <input
                 type="email"
                 placeholder="Email"
                 className={loginErrors.email ? "danger-border" : ""}
+                value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
               />
               {loginErrors?.email && <p className="danger-text">{loginErrors?.email}</p>}
@@ -161,6 +174,7 @@ export default function Login() {
                   type={showLoginPassword ? "text" : "password"}
                   placeholder="Password"
                   className={loginErrors.password ? "danger-border" : ""}
+                  value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                 />
                 <button
@@ -174,7 +188,7 @@ export default function Login() {
               {loginErrors?.password && <p className="danger-text">{loginErrors?.password}</p>}
             </div>
             <Link to="/forgot">Forgot password?</Link>
-            <input type="submit" value="Sign In" />
+            <input type="submit" value={loading ? "Signing In..." : "Sign In"} disabled={loading}/>
           </form>
         </div>
       </div>

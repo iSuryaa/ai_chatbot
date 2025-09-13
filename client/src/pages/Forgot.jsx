@@ -9,11 +9,13 @@ export default function Forgot() {
   const [forgotMsg, setForgotMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showCnfmPassword, setShowCnfmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const data = await forgot(form);
       setForgotMsg(data.message);
@@ -26,6 +28,8 @@ export default function Forgot() {
         , 3000);
     } catch (err) {
       setForgotErrors(err.response.data.errors);
+    } finally {
+    setLoading(false);
     }
   };
 
@@ -90,7 +94,7 @@ export default function Forgot() {
             </div>
             {forgotMsg && <p className="success-text">{forgotMsg}</p>}
             <Link to="/">← Back to login </Link>
-            <input type="submit" value="Change Password" />
+            <input type="submit" value={loading ? "Updating..." : "Change Password"} disabled={loading}/>
           </form>
         </div>
       </div>
