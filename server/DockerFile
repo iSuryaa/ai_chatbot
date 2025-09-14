@@ -1,0 +1,20 @@
+# Use Node.js LTS
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files first (better cache)
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy rest of server code
+COPY . .
+
+# Expose port
+EXPOSE 4000
+
+# Start server
+CMD ["npm", "start"]
